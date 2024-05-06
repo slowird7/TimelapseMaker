@@ -7,4 +7,6 @@ module com.kinsoku.timelapsemaker {
 
     opens com.kinsoku.timelapsemaker to javafx.fxml;
     exports com.kinsoku.timelapsemaker;
+    exports com.kinsoku.application;
+    opens com.kinsoku.application to javafx.fxml;
 }

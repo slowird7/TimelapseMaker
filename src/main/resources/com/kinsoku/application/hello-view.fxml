@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane fx:id="ap" prefHeight="166.0" prefWidth="630.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kinsoku.timelapsemaker.HelloController">
+<AnchorPane fx:id="ap" prefHeight="166.0" prefWidth="630.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kinsoku.application.MainController">
    <children>
       <TextField fx:id="txtScriptFile" layoutX="24.0" layoutY="28.0" prefHeight="25.0" prefWidth="475.0" promptText="Select script file" text="section1.csv" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="131.0" AnchorPane.topAnchor="28.0" />
        <Button fx:id="btnGenerateMovie" layoutX="33.0" layoutY="70.0" onAction="#onBtnGenerateMovie" text="Generate movie" AnchorPane.leftAnchor="33.0" AnchorPane.topAnchor="70.0" />
