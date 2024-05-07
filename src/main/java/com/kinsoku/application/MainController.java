@@ -17,7 +17,7 @@ public class MainController {
     @FXML
     TextField txtScriptFile;
     @FXML
-    Button btnGenerateMovie;
+    Button btnCreateMovie;
     @FXML
     Button btnSelScriptFile;
     @FXML
@@ -40,7 +40,7 @@ public class MainController {
     }
 
     @FXML
-    private void onBtnGenerateMovie() {
+    private void onBtnCreateMovie() {
         if (txtScriptFile.getText().isBlank()) {
             new Alert(Alert.AlertType.CONFIRMATION, "Select script file first.", ButtonType.OK).showAndWait();
             return;
@@ -52,7 +52,7 @@ public class MainController {
 
         if (maker != null && maker.isRunning()) {
             maker.cancel();
-            btnGenerateMovie.setText("Generate movie");
+            btnCreateMovie.setText("Create movie");
         } else {
             maker = new TimelapseMaker(txtScriptFile.getText());
             progressBar.progressProperty().unbind();
@@ -60,28 +60,28 @@ public class MainController {
             maker.setOnSucceeded((state) -> {
                 Platform.runLater(() -> {
                     new Alert(Alert.AlertType.INFORMATION, "Finished.", ButtonType.OK).showAndWait();
-                    btnGenerateMovie.setText("Generate movie");
+                    btnCreateMovie.setText("Create movie");
                 });
             });
             maker.setOnFailed((state) -> {
                 Platform.runLater(() -> {
                     new Alert(Alert.AlertType.INFORMATION, "Failed.", ButtonType.OK).showAndWait();
-                    btnGenerateMovie.setText("Generate movie");
+                    btnCreateMovie.setText("Create movie");
                 });
             });
             maker.setOnCancelled((state) -> {
                 Platform.runLater(() -> {
                     new Alert(Alert.AlertType.INFORMATION, "Cancelled.", ButtonType.OK).showAndWait();
-                    btnGenerateMovie.setText("Generate movie");
+                    btnCreateMovie.setText("Create movie");
                 });
             });
             try {
-                btnGenerateMovie.setText("Cancell");
+                btnCreateMovie.setText("Cancell");
                 new Thread(maker).start();
             } catch (Exception ex) {
                 Platform.runLater(() -> {
                     new Alert(Alert.AlertType.WARNING, ex.getMessage(), ButtonType.OK).showAndWait();
-                    btnGenerateMovie.setText("Generate movie");
+                    btnCreateMovie.setText("Create movie");
                 });
             }
         }
