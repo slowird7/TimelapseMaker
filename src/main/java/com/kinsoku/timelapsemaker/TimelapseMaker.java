@@ -10,10 +10,7 @@ import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.bytedeco.opencv.opencv_core.*;
 import org.bytedeco.opencv.opencv_java;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.LineNumberReader;
+import java.io.*;
 
 import static org.bytedeco.opencv.global.opencv_core.*;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.imread;
@@ -45,7 +42,7 @@ public class TimelapseMaker extends Task  {
 
     private int countLines(File textFile) throws IOException {
         int count = 0;
-        try (LineNumberReader br = new LineNumberReader(new FileReader(textFile));) {
+        try (LineNumberReader br = new LineNumberReader(new InputStreamReader(new FileInputStream(textFile), "SJIS"));) {
             String line;
             while ((line = br.readLine()) != null) {
                 count++;
@@ -79,8 +76,8 @@ public class TimelapseMaker extends Task  {
                 }
                 try {
                     String[] d = line.split(",", 0);
-                    Mat leftImage = createFrameImage(d[1]);
-                    Mat rightImage = createFrameImage(d[2]);
+                    Mat leftImage = createFrameImage(d[1], d.length >= 5 ?  d[4]: "");
+                    Mat rightImage = createFrameImage(d[2], d.length >= 5 ? d[4]: "");
                     Mat builtImage = new Mat();
                     hconcat(new MatVector(leftImage, rightImage), builtImage);
 //                imshow("monitor", builtImage);
@@ -98,7 +95,7 @@ public class TimelapseMaker extends Task  {
         }
     }
 
-    private Mat createFrameImage(String imageFileName) {
+    private Mat createFrameImage(final String imageFileName, final String msg) {
         Mat image = imread(imageFileName);
         if (image == null) {
             image = new Mat(IMAGE_HEIGHT, IMAGE_WIDTH, CV_64FC1, new Scalar(0, 0, 0, 2.0));
@@ -108,6 +105,9 @@ public class TimelapseMaker extends Task  {
         Mat brightImage = new Mat();
         convertScaleAbs(resizedImage, brightImage, gain_bias, brightness_bias);
         putText(brightImage, new File(imageFileName).getName(), new Point(20, 20), FONT_HERSHEY_DUPLEX, 0.5, new Scalar(255, 255, 255, 2.0));
+        if (msg != null && !msg.isBlank()) {
+            putText(brightImage, msg, new Point(20, 40), FONT_HERSHEY_DUPLEX, 0.5, new Scalar(255, 255, 255, 2.0));
+        }
         return brightImage;
     }
 
