@@ -76,8 +76,8 @@ public class TimelapseMaker extends Task  {
                 }
                 try {
                     String[] d = line.split(",", 0);
-                    Mat leftImage = createFrameImage(d[1], d.length >= 5 ?  d[4]: "");
-                    Mat rightImage = createFrameImage(d[2], d.length >= 5 ? d[4]: "");
+                    Mat leftImage = createFrameImage(d[1], d);
+                    Mat rightImage = createFrameImage(d[2], d);
                     Mat builtImage = new Mat();
                     hconcat(new MatVector(leftImage, rightImage), builtImage);
 //                imshow("monitor", builtImage);
@@ -95,7 +95,7 @@ public class TimelapseMaker extends Task  {
         }
     }
 
-    private Mat createFrameImage(final String imageFileName, final String msg) {
+    private Mat createFrameImage(final String imageFileName, final String str[]) {
         Mat image = imread(imageFileName);
         if (image == null) {
             image = new Mat(IMAGE_HEIGHT, IMAGE_WIDTH, CV_64FC1, new Scalar(0, 0, 0, 2.0));
@@ -105,9 +105,12 @@ public class TimelapseMaker extends Task  {
         Mat brightImage = new Mat();
         convertScaleAbs(resizedImage, brightImage, gain_bias, brightness_bias);
         putText(brightImage, new File(imageFileName).getName(), new Point(20, 20), FONT_HERSHEY_DUPLEX, 0.5, new Scalar(255, 255, 255, 2.0));
-        if (msg != null && !msg.isBlank()) {
-            putText(brightImage, msg, new Point(20, 40), FONT_HERSHEY_DUPLEX, 0.5, new Scalar(255, 255, 255, 2.0));
-        }
+        StringBuilder sb = new StringBuilder();
+        if (str[3] != null) { sb.append(str[3]);}
+        if (str[4] != null) { sb.append(" R:"); sb.append(str[4]);}
+        if (str[5] != null) { sb.append(" S:"); sb.append(str[5]);}
+        if (str[6] != null) { sb.append(" "); sb.append(str[6]);}
+        putText(brightImage, sb.toString(), new Point(20, 40), FONT_HERSHEY_DUPLEX, 0.5, new Scalar(255, 255, 255, 2.0));
         return brightImage;
     }
 
